@@ -64,7 +64,7 @@ class SaleOrderOptica(models.Model):
                                                         ,('Varilux Physio 3.0', 'Varilux Physio 3.0')
                                                         ,('Varilux Physio Short', 'Varilux Physio Short')
                                                         ,('Varilux Physio 3.0 Short', 'Varilux Physio 3.0 Short')
-                                                        ,('Otro', 'Otro')
+                                                        ,('Otro', 'Otro')]
                                                         , string='Tipo de lente multifocal')
     color=fields.Selection(selection=[('Blanco', 'Blanco')
                                         ,('Polarizado Gris', 'Polarizado Gris')
@@ -73,11 +73,11 @@ class SaleOrderOptica(models.Model):
                                         ,('Transition Cafe', 'Transition Cafe')
                                         ,('Transition Safiro', 'Transition Safiro')
                                         ,('Transition Amatista', 'Ovation')
-                                        ,('Entintado', 'Ovation')
+                                        ,('Entintado', 'Ovation')]
                                         , string='Color')
     tipo_aro=fields.Selection(selection=[('Cerrado', 'Cerrado')
                                         ,('Ranurado', 'Ranurado')
-                                        ,('Al Aire', 'Al Aire')
+                                        ,('Al Aire', 'Al Aire')]
                                         , string='Tipo de Aro')
                                         
     @api.one
