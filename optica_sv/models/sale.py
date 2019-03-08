@@ -83,93 +83,93 @@ class SaleOrderOptica(models.Model):
     @api.one
     @api.constrains('oi_esfera', 'od_esfera')
     def check_esfera(self):
-        if(self.oi_esfera<(-22))
+        if(self.oi_esfera<(-22)):
             raise ValidationError("el valor de la esfera no es valido, debe estar entre -22 y +13")
-        if(self.od_esfera<(-22))
+        if(self.od_esfera<(-22)):
             raise ValidationError("el valor de la esfera no es valido, debe estar entre -22 y +13")
-        if(self.oi_esfera>(13))
+        if(self.oi_esfera>(13)):
             raise ValidationError("el valor de la esfera no es valido, debe estar entre -22 y +13")
-        if(self.oi_esfera>(13))
+        if(self.oi_esfera>(13)):
             raise ValidationError("el valor de la esfera no es valido, debe estar entre -22 y +13")
     
     @api.one
     @api.constrains('oi_cilindro', 'od_cilindro')
     def check_cilindro(self):
-        if(self.oi_cilindro<(-12))
+        if(self.oi_cilindro<(-12)):
             raise ValidationError("el valor de la cilindro no es valido, debe estar entre -12 y -0.25")
-        if(self.od_cilindro<(-12))
+        if(self.od_cilindro<(-12)):
             raise ValidationError("el valor de la cilindro no es valido, debe estar entre -12 y -0.25")
-        if(self.oi_cilindro>(-0.25))
+        if(self.oi_cilindro>(-0.25)):
             raise ValidationError("el valor de la cilindro no es valido, debe estar entre -12 y -0.25")
-        if(self.od_cilindro>(-0.25))
+        if(self.od_cilindro>(-0.25)):
             raise ValidationError("el valor de la cilindro no es valido, debe estar entre -12 y -0.25")
     
     @api.one
     @api.constrains('oi_eje', 'od_eje')
     def check_eje(self):
-        if(self.oi_eje<(0))
+        if(self.oi_eje<(0)):
             raise ValidationError("el valor de la eje no es valido, debe estar entre 0 y 180")
-        if(self.od_eje<(0))
+        if(self.od_eje<(0)):
             raise ValidationError("el valor de la eje no es valido, debe estar entre 0 y 180")
-        if(self.oi_eje>(180))
+        if(self.oi_eje>(180)):
             raise ValidationError("el valor de la eje no es valido, debe estar entre 0 y 180")
-        if(self.od_eje>(180))
+        if(self.od_eje>(180)):
             raise ValidationError("el valor de la eje no es valido, debe estar entre  0 y 180")
 
     @api.one
     @api.constrains('oi_adicion', 'od_adicion')
     def check_adicion(self):
-        if(self.oi_adicion<(0.75))
+        if(self.oi_adicion<(0.75)):
             raise ValidationError("el valor de la adicion no es valido, debe estar entre 0.75 y 3.5")
-        if(self.od_adicion<(0.75))
+        if(self.od_adicion<(0.75)):
             raise ValidationError("el valor de la adicion no es valido, debe estar entre 0.75 y 3.5")
-        if(self.oi_adicion>(3.5))
+        if(self.oi_adicion>(3.5)):
             raise ValidationError("el valor de la adicion no es valido, debe estar entre 0.75 y 3.5")
-        if(self.od_adicion>(3.5))
+        if(self.od_adicion>(3.5)):
             raise ValidationError("el valor de la adicion no es valido, debe estar entre 0.75 y 3.5")
     
     @api.one
     @api.constrains('oi_prisma', 'od_prisma')
     def check_prisma(self):
-        if(self.oi_prisma<(0.25))
+        if(self.oi_prisma<(0.25)):
             raise ValidationError("el valor de la prisma no es valido, debe estar entre 0.25 y 10")
-        if(self.od_prisma<(0.25))
+        if(self.od_prisma<(0.25)):
             raise ValidationError("el valor de la prisma no es valido, debe estar entre 0.25 y 10")
-        if(self.oi_prisma>(10))
+        if(self.oi_prisma>(10)):
             raise ValidationError("el valor de la prisma no es valido, debe estar entre 0.25 y 10")
-        if(self.od_prisma>(10))
+        if(self.od_prisma>(10)):
             raise ValidationError("el valor de la prisma no es valido, debe estar entre 0.25 y 10")
     
     @api.one
     @api.constrains('base')
     def check_base(self):
-        if(self.base<(0.25))
+        if(self.base<(0.25)):
             raise ValidationError("el valor de la base no es valido, debe estar entre 0.25 y 10")
-        if(self.base>(10))
+        if(self.base>(10)):
             raise ValidationError("el valor de la base no es valido, debe estar entre 0.25 y 10")
     
 
     @api.one
     @api.constrains('oi_oblea', 'od_oblea')
     def check_prisma(self):
-        if(self.oi_oblea<(5))
+        if(self.oi_oblea<(5)):
             raise ValidationError("el valor de la altura oblea no es valido, debe estar entre 5 y 25")
-        if(self.od_oblea<(25))
+        if(self.od_oblea<(25)):
             raise ValidationError("el valor de la altura oblea no es valido, debe estar entre 5 y 25")
-        if(self.oi_oblea>(5))
+        if(self.oi_oblea>(5)):
             raise ValidationError("el valor de la altura oblea no es valido, debe estar entre 5 y 25")
-        if(self.od_oblea>(25))
+        if(self.od_oblea>(25)):
             raise ValidationError("el valor de la altura oblea no es valido, debe estar entre 5 y 25")
     
     @api.one
     @api.constrains('oi_nasopupilar', 'od_nasopupilar')
     def check_naso(self):
-        if(self.oi_nasopupilar<(45))
+        if(self.oi_nasopupilar<(45)):
             raise ValidationError("el valor de la distancia naso pupilar no es valido, debe estar entre 45 y 80")
-        if(self.od_nasopupilar<(80))
+        if(self.od_nasopupilar<(80)):
             raise ValidationError("el valor de la distancia naso pupilar no es valido, debe estar entre 45 y 80")
-        if(self.oi_nasopupilar>(45))
+        if(self.oi_nasopupilar>(45)):
             raise ValidationError("el valor de la distancia naso pupilar no es valido, debe estar entre 45 y 80")
-        if(self.od_nasopupilar>(80))
+        if(self.od_nasopupilar>(80)):
             raise ValidationError("el valor de la distancia naso pupilar no es valido, debe estar entre 45 y 80")
 
