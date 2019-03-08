@@ -154,9 +154,9 @@ class SaleOrderOptica(models.Model):
     def check_prisma(self):
         if(self.oi_oblea<(5)):
             raise ValidationError("el valor de la altura oblea no es valido, debe estar entre 5 y 25")
-        if(self.od_oblea<(25)):
+        if(self.od_oblea<(5)):
             raise ValidationError("el valor de la altura oblea no es valido, debe estar entre 5 y 25")
-        if(self.oi_oblea>(5)):
+        if(self.oi_oblea>(25)):
             raise ValidationError("el valor de la altura oblea no es valido, debe estar entre 5 y 25")
         if(self.od_oblea>(25)):
             raise ValidationError("el valor de la altura oblea no es valido, debe estar entre 5 y 25")
