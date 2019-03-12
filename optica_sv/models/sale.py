@@ -12,7 +12,7 @@ from odoo import SUPERUSER_ID
 class UserOptica(models.Model):
     _inherit = 'res.users'    
     sucursal=fields.Many2one(comodel_name='stock.warehouse', string='Sucrusal de venta')
-    tarifas=fields.Many2many(comodel_name='product.pricelist', string='Tarifas permitidas'
+    tarifas=fields.Many2many(comodel_name='product.pricelist', string='Tarifas permitidas')
 
 class SaleOrderOptica(models.Model):
     _inherit = 'sale.order'
