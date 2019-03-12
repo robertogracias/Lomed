@@ -38,7 +38,7 @@ class SaleOrderOptica(models.Model):
     od_nasopupilar_lejos = fields.Float("OD. Distancia Nasopupilar Lejos", required=True)
     od_nasopupilar = fields.Float('OD. Distancia Nasopupilar Lejos',compute='_compute_nasopupilar')
     od_nasopupilar = fields.Float('OD. Distancia Nasopupilar Lejos',compute='_compute_nasopupilar')
-    es_lente = fields.Bolean('Es Lente',compute='_compute_lente')
+    es_lente = fields.Boolean('Es Lente',compute='_compute_lente')
     base = fields.Float("Base", required=False)
     medida_a = fields.Float("A", required=True)
     medida_b = fields.Float("B", required=True)
