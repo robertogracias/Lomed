@@ -38,22 +38,12 @@ class SaleOrderOptica(models.Model):
     od_nasopupilar_lejos = fields.Float("OD. Distancia Nasopupilar Lejos", required=True)
     od_nasopupilar = fields.Float('OD. Distancia Nasopupilar Lejos',compute='_compute_nasopupilar')
     od_nasopupilar = fields.Float('OD. Distancia Nasopupilar Lejos',compute='_compute_nasopupilar')
-    es_lente = fields.Boolean('Es Lente',compute='_compute_lente')
+    es_lente = fields.Boolean("Es Lente")
     base = fields.Float("Base", required=False)
     medida_a = fields.Float("A", required=True)
     medida_b = fields.Float("B", required=True)
     medida_c = fields.Float("C", required=True)
     medida_d = fields.Float("D", required=True)
-    
-    @api.one
-    @api.depends('oi_nasopupilar_cerca', 'oi_nasopupilar_cerca')
-    def _compute_nasopupilar(self):
-        self.es_lente=False
-        for line in order_line:
-            if (line.product):
-                if (line.product.categ_id):
-                    if (line.product.categ_id.name=='LENTE'):
-                        self.es_lente=True
     
     
     @api.one
@@ -96,92 +86,5 @@ class SaleOrderOptica(models.Model):
                                         ,('Al Aire', 'Al Aire')]
                                         , string='Tipo de Aro')
                                         
-    @api.one
-    @api.constrains('oi_esfera', 'od_esfera')
-    def check_esfera(self):
-        if self.es_lente:
-            if(self.oi_esfera<(-22)):
-                raise ValidationError("el valor de la esfera no es valido, debe estar entre -22 y +13")
-            if(self.od_esfera<(-22)):
-                raise ValidationError("el valor de la esfera no es valido, debe estar entre -22 y +13")
-            if(self.oi_esfera>(13)):
-                raise ValidationError("el valor de la esfera no es valido, debe estar entre -22 y +13")
-            if(self.oi_esfera>(13)):
-                raise ValidationError("el valor de la esfera no es valido, debe estar entre -22 y +13")
-    
-    @api.one
-    @api.constrains('oi_cilindro', 'od_cilindro')
-    def check_cilindro(self):
-        if self.es_lente:
-            if(self.oi_cilindro<(-12)):
-                raise ValidationError("el valor de la cilindro no es valido, debe estar entre -12 y -0.25")
-            if(self.od_cilindro<(-12)):
-                raise ValidationError("el valor de la cilindro no es valido, debe estar entre -12 y -0.25")
-            if(self.oi_cilindro>(-0.25)):
-                raise ValidationError("el valor de la cilindro no es valido, debe estar entre -12 y -0.25")
-            if(self.od_cilindro>(-0.25)):
-                raise ValidationError("el valor de la cilindro no es valido, debe estar entre -12 y -0.25")
-    
-    @api.one
-    @api.constrains('oi_eje', 'od_eje')
-    def check_eje(self):
-        if self.es_lente:
-            if(self.oi_eje<(0)):
-                raise ValidationError("el valor de la eje no es valido, debe estar entre 0 y 180")
-            if(self.od_eje<(0)):
-                raise ValidationError("el valor de la eje no es valido, debe estar entre 0 y 180")
-            if(self.oi_eje>(180)):
-                raise ValidationError("el valor de la eje no es valido, debe estar entre 0 y 180")
-            if(self.od_eje>(180)):
-                raise ValidationError("el valor de la eje no es valido, debe estar entre  0 y 180")
 
-    @api.one
-    @api.constrains('oi_adicion', 'od_adicion')
-    def check_adicion(self):
-        if self.es_lente:
-            if(self.oi_adicion<(0.75)):
-                raise ValidationError("el valor de la adicion no es valido, debe estar entre 0.75 y 3.5")
-            if(self.od_adicion<(0.75)):
-                raise ValidationError("el valor de la adicion no es valido, debe estar entre 0.75 y 3.5")
-            if(self.oi_adicion>(3.5)):
-                raise ValidationError("el valor de la adicion no es valido, debe estar entre 0.75 y 3.5")
-            if(self.od_adicion>(3.5)):
-                raise ValidationError("el valor de la adicion no es valido, debe estar entre 0.75 y 3.5")
-    
-    @api.one
-    @api.constrains('oi_prisma', 'od_prisma')
-    def check_prisma(self):
-        if self.es_lente:
-            if(self.oi_prisma<(0.25)):
-                raise ValidationError("el valor de la prisma no es valido, debe estar entre 0.25 y 10")
-            if(self.od_prisma<(0.25)):
-                raise ValidationError("el valor de la prisma no es valido, debe estar entre 0.25 y 10")
-            if(self.oi_prisma>(10)):
-                raise ValidationError("el valor de la prisma no es valido, debe estar entre 0.25 y 10")
-            if(self.od_prisma>(10)):
-                raise ValidationError("el valor de la prisma no es valido, debe estar entre 0.25 y 10")
-    
-    @api.one
-    @api.constrains('base')
-    def check_base(self):
-        if self.es_lente:
-            if(self.base<(0.25)):
-                raise ValidationError("el valor de la base no es valido, debe estar entre 0.25 y 10")
-            if(self.base>(10)):
-                raise ValidationError("el valor de la base no es valido, debe estar entre 0.25 y 10")
-    
-
-    @api.one
-    @api.constrains('oi_oblea', 'od_oblea')
-    def check_prisma(self):
-        if self.es_lente:
-            if(self.oi_oblea<(5)):
-                raise ValidationError("el valor de la altura oblea no es valido, debe estar entre 5 y 25")
-            if(self.od_oblea<(5)):
-                raise ValidationError("el valor de la altura oblea no es valido, debe estar entre 5 y 25")
-            if(self.oi_oblea>(25)):
-                raise ValidationError("el valor de la altura oblea no es valido, debe estar entre 5 y 25")
-            if(self.od_oblea>(25)):
-                raise ValidationError("el valor de la altura oblea no es valido, debe estar entre 5 y 25")
-    
     
