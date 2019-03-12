@@ -52,7 +52,7 @@ class SaleOrderOptica(models.Model):
         for line in order_line:
             if (line.product):
                 if (line.product.categ_id):
-                    if (line.product.categ_id.name='LENTE'):
+                    if (line.product.categ_id.name=='LENTE'):
                         self.es_lente=True
     
     
