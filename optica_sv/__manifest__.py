@@ -13,7 +13,7 @@
     "author": "Strategi-k",
     "website": "http://strategi-k.com",
     "version": '12.0.0.4',
-    "depends": ['sale'],
+    "depends": ['sale','stock','sale_stock'],
     "data": [
         'security/ir.model.access.csv'
     ],
