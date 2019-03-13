@@ -77,8 +77,8 @@ class SaleOrderOptica(models.Model):
                                         ,('Transition Gris', 'Transition Gris')
                                         ,('Transition Cafe', 'Transition Cafe')
                                         ,('Transition Safiro', 'Transition Safiro')
-                                        ,('Transition Amatista', 'Ovation')
-                                        ,('Entintado', 'Ovation')]
+                                        ,('Transition Amatista', 'Transition Amatista')
+                                        ,('Entintado', 'Entintado')]
                                         , string='Color')
     tipo_aro=fields.Selection(selection=[('Cerrado', 'Cerrado')
                                         ,('Ranurado', 'Ranurado')
