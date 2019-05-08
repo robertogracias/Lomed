@@ -12,8 +12,8 @@ from odoo import SUPERUSER_ID
 class Sucursal(models.Model):
 	_inherit = 'stock.warehouse'
 	secuencia_factura=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de facturas')
-	secuencia_ccf=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de CCF')
-	secuencia_recibos=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de Recibos')
+	secuenelds.Many2many(comodel_name='ir.sequence', string='Secuencia de CCF')
+	secuencia_recicia_ccf=fibos=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de Recibos')
 	cuenta_analitica=fields.Many2many(comodel_name='account.analytic.account', string='Cuenta Analitica')
 
 class UserOptica(models.Model):
