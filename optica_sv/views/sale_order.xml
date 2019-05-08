@@ -56,6 +56,85 @@
                 </xpath>
             </field>
         </record>
+        
+        <record id="sale_order_opticasv_form" model="ir.ui.view">
+            <field name="name">sale order opticasv</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='order_lines']/field[@name='order_line']/tree[1]/field[@name='price_unit']" position="attributes">
+    <attribute name="attrs">{}</attribute>
+  </xpath>
+  <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+    <page name="studio_page_DCXMz" string="Orden de Trabajo">
+      <group name="studio_group_DCXMz">
+        <group name="studio_group_DCXMz_right" string="Ojo Derecho">
+          <field name="od_esfera"/>
+          <field name="od_cilindro"/>
+          <field name="od_eje"/>
+          <field name="od_prisma"/>
+          <field name="od_adicion"/>
+        </group>
+        <group name="studio_group_DCXMz_left" string="Ojo Izquierdo">
+          <field name="oi_esfera"/>
+          <field name="oi_cilindro"/>
+          <field name="oi_eje"/>
+          <field name="oi_prisma"/>
+          <field name="oi_adicion"/>
+        </group>
+      </group>
+      <group name="studio_group_VVIIp">
+        <group name="studio_group_VVIIp_left">
+          <field name="material"/>
+          <field name="antireflejo"/>
+          <field name="color"/>
+          <field name="tipo_aro"/>
+          <field name="tipo_lente"/>
+          <field name="tipo_lente_bifocal" attrs="{&quot;invisible&quot;: [[&quot;tipo_lente&quot;,&quot;!=&quot;,&quot;Bifocal&quot;]]}"/>
+          <field name="tipo_lente_multifocal" attrs="{&quot;invisible&quot;: [[&quot;tipo_lente&quot;,&quot;!=&quot;,&quot;Multifocal&quot;]]}"/>
+          <field name="tipo_lente_sencilla" attrs="{&quot;invisible&quot;: [[&quot;tipo_lente&quot;,&quot;!=&quot;,&quot;Sencilla&quot;]]}"/>
+        </group>
+        <group name="studio_group_VVIIp_right"/>
+      </group>
+      <group name="studio_group_SEmr0">
+        <group name="studio_group_SEmr0_right" string="Ojo Derecho">
+          <field name="od_oblea" attrs="{&quot;invisible&quot;: [[&quot;tipo_lente&quot;,&quot;!=&quot;,&quot;Bifocal&quot;]]}"/>
+          <field name="od_pupilar"/>
+          <field name="od_nasopupilar_lejos" attrs="{}"/>
+          <field name="od_nasopupilar_cerca"/>
+          <field name="od_nasopupilar" string="OD. Distancia Nasopupilar" attrs="{}" invisible="1"/>
+        </group>
+        <group name="studio_group_SEmr0_left" string="Ojo Izquierdo">
+          <field name="oi_oblea" attrs="{&quot;invisible&quot;: [[&quot;tipo_lente&quot;,&quot;!=&quot;,&quot;Bifocal&quot;]]}"/>
+          <field name="oi_pupilar" attrs="{}"/>
+          <field name="oi_nasopupilar_cerca"/>
+          <field name="oi_nasopupilar_lejos"/>
+          <field name="oi_nasopupilar" string="OI. Distancia Nasopupilar" attrs="{}" invisible="1"/>
+        </group>
+      </group>
+      <group name="studio_group_4b2TC">
+        <group name="studio_group_4b2TC_left">
+          <field name="x_examino"/>
+          <field name="x_studio_fecha_de_entrega" string="Fecha de entrega"/>
+          <field name="x_asesor_visual"/>
+          <field name="x_observaciones"/>
+        </group>
+        <group name="studio_group_4b2TC_right">
+          <field name="medida_a"/>
+          <field name="medida_b"/>
+          <field name="medida_c"/>
+          <field name="medida_d"/>
+        </group>
+      </group>
+    </page>
+  </xpath>
+                
+                
+                
+                
+                
+            </field>
+        </record>
 
      <record id="product_bundle_product_search_view" model="ir.ui.view">
             <field name="name">product.template.search</field>

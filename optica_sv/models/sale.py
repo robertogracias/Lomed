@@ -9,13 +9,21 @@ from odoo.tools import float_is_zero, float_compare, DEFAULT_SERVER_DATETIME_FOR
 from odoo import SUPERUSER_ID
 
 
+class Sucursal(models.Model):
+	_inherit = 'stock.warehouse'
+	secuencia_factura=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de facturas')
+	secuencia_ccf=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de CCF')
+	secuencia_recibos=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de Recibos')
+	cuenta_analitica=fields.Many2many(comodel_name='account.analytic.account', string='Cuenta Analitica')
+
 class UserOptica(models.Model):
     _inherit = 'res.users'    
-    sucursal=fields.Many2one(comodel_name='stock.warehouse', string='Sucrusal de venta')
+    sucursal_id=fields.Many2one(comodel_name='stock.warehouse', string='Sucursal de venta')
     tarifas=fields.Many2many(comodel_name='product.pricelist', string='Tarifas permitidas')
 
 class SaleOrderOptica(models.Model):
-    _inherit = 'sale.order'
+    _inherit = 'sale.order')
+    sucursal_id=fields.Many2one(comodel_name='stock.warehouse', string='Sucursal de venta',default=lambda self: self.env.user.sucursal_id.id)
     oi_esfera = fields.Float("OI. Esfera", required=True)
     oi_cilindro = fields.Float("OI. Cilindro", required=True)
     oi_eje = fields.Float("OI. Eje", required=True)
