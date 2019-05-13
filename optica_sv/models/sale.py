@@ -10,19 +10,18 @@ from odoo import SUPERUSER_ID
 
 
 class Sucursal(models.Model):
-	_inherit = 'stock.location'
-	secuencia_factura=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de facturas')
-	secuencia_ccf=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de CCF')
-	secuencia_recibos=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de Recibos')
-	cuenta_analitica=fields.Many2many(comodel_name='account.analytic.account', string='Cuenta Analitica')
+    _inherit = 'stock.location'
+    secuencia_factura=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de facturas')
+    secuencia_ccf=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de CCF')
+    secuencia_recibos=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de Recibos')
+    cuenta_analitica=fields.Many2many(comodel_name='account.analytic.account', string='Cuenta Analitica')
 
 class UserOptica(models.Model):
-    _inherit = 'res.users'    
+    _inherit = 'res.users'
     sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta')
     tarifas=fields.Many2many(comodel_name='product.pricelist', string='Tarifas permitidas')
 
 class FacturaSV(models.Model):
-    _inherit = 'account.invoice'    
     sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta',default=lambda self: self.env.user.sucursal_id.id)
     monto_letras=fields.Char('Monto en letras',compute='_fill_invoice',store=True)
     excento=fields.Float('excento',compute='_fill_invoice',store=True)
@@ -57,6 +56,7 @@ class FacturaSV(models.Model):
 class SaleOrderOptica(models.Model):
     _inherit = 'sale.order'
     sucursal_id=fields.Many2one(comodel_name='stock.warehouse', string='Sucursal de venta',default=lambda self: self.env.user.sucursal_id.id)
+    sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta',default=lambda self: self.env.user.sucursal_id.id)
     oi_esfera = fields.Float("OI. Esfera", required=True)
     oi_cilindro = fields.Float("OI. Cilindro", required=True)
     oi_eje = fields.Float("OI. Eje", required=True)
@@ -127,4 +127,3 @@ class SaleOrderOptica(models.Model):
                                         , string='Tipo de Aro')
                                         
 
-    
