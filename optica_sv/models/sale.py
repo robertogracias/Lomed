@@ -55,7 +55,7 @@ class FacturaSV(models.Model):
 				self.iva=self.iva+tline.amount
 			if tline.tax_id.tax_group_id.name='percepcion':
 				self.percibido=self.percibido+tline.amount
-		self.monto_letras=numero_a_letras(self.amount_total)	
+		self.monto_letras='prueba'	
     
 
 
