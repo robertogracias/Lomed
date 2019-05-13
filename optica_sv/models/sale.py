@@ -36,13 +36,13 @@ class FacturaSV(models.Model):
     @api.one
     @api.depends('amount','invoice_line_ids')
     def _fill_invoice(self):
-		total=0;
-		excento=0;
-		gravado=0;
-		nosujeto=0;
-		retenido=0;
-		percibido=0;
-		iva=0;
+		total=0
+		excento=0
+		gravado=0
+		nosujeto=0
+		retenido=0
+		percibido=0
+		iva=0
 		for line in self.invoice_line_ids:
 			if line.invoice_line_tax_ids:
 				gravado=gravado+line.price_subtotal
@@ -50,11 +50,11 @@ class FacturaSV(models.Model):
 				excento=excento+line.price_subtotal
 		for tline in self.tax_line_ids:
 			if tline.tax_id.tax_group_id.name='retencion':
-				retenido=retenido+tline.amount;
+				retenido=retenido+tline.amount
 			if tline.tax_id.tax_group_id.name='iva':
-				iva=iva+tline.amount;
+				iva=iva+tline.amount
 			if tline.tax_id.tax_group_id.name='percepcion':
-				percibido=percibido+tline.amount;
+				percibido=percibido+tline.amount
 		monto_letras=numero_a_letras(self.amount_total)	
     
 
