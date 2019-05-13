@@ -7,10 +7,11 @@ from datetime import datetime, timedelta
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import float_is_zero, float_compare, DEFAULT_SERVER_DATETIME_FORMAT
 from odoo import SUPERUSER_ID
+from numero_letras import numero_a_letras, numero_a_moneda
 
 
 class Sucursal(models.Model):
-	_inherit = 'stock.warehouse'
+	_inherit = 'stock.location'
 	secuencia_factura=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de facturas')
 	secuenelds.Many2many(comodel_name='ir.sequence', string='Secuencia de CCF')
 	secuencia_recicia_ccf=fibos=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de Recibos')
@@ -18,8 +19,44 @@ class Sucursal(models.Model):
 
 class UserOptica(models.Model):
     _inherit = 'res.users'    
-    sucursal_id=fields.Many2one(comodel_name='stock.warehouse', string='Sucursal de venta')
+    sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta')
     tarifas=fields.Many2many(comodel_name='product.pricelist', string='Tarifas permitidas')
+
+class FacturaSV(models.Model):
+    _inherit = 'account.invoice'    
+    sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta',default=lambda self: self.env.user.sucursal_id.id)
+    monto_letras=fields.Char('Monto en letras',compute='_fill_invoice',store=true)
+    excento=fields.Float('excento',compute='_fill_invoice',store=true)
+    gravado=fields.Float('gravado',compute='_fill_invoice',store=true)
+    nosujeto=fields.Float('nosujeto',compute='_fill_invoice',store=true)
+    retenido=fields.Float('retenido',compute='_fill_invoice',store=true)
+    percibido=fields.Float('percibido',compute='_fill_invoice',store=true)
+    iva=fields.Float('iva',compute='_fill_invoice',store=true)
+    
+    @api.one
+    @api.depends('amount','invoice_line_ids')
+    def _fill_invoice(self):
+		total=0;
+		excento=0;
+		gravado=0;
+		nosujeto=0;
+		retenido=0;
+		percibido=0;
+		iva=0;
+		for line in self.invoice_line_ids:
+			if line.invoice_line_tax_ids:
+				gravado=gravado+line.price_subtotal
+			else:
+				excento=excento+line.price_subtotal
+		for tline in self.tax_line_ids:
+			if tline.tax_id.tax_group_id.name='retencion':
+				retenido=retenido+tline.amount;
+			if tline.tax_id.tax_group_id.name='iva':
+				iva=iva+tline.amount;
+			if tline.tax_id.tax_group_id.name='percepcion':
+				percibido=percibido+tline.amount;
+		monto_letras=numero_a_letras(self.amount_total)	
+    
 
 class SaleOrderOptica(models.Model):
     _inherit = 'sale.order')
