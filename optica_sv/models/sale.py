@@ -10,14 +10,14 @@ from odoo import SUPERUSER_ID
 
 
 class Sucursal(models.Model):
-	_inherit = 'stock.location'
-	secuencia_factura=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de facturas')
-	secuencia_ccf=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de CCF')
-	secuencia_recibos=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de Recibos')
-	cuenta_analitica=fields.Many2many(comodel_name='account.analytic.account', string='Cuenta Analitica')
+    _inherit = 'stock.location'
+    secuencia_factura=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de facturas')
+    secuencia_ccf=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de CCF')
+    secuencia_recibos=fields.Many2many(comodel_name='ir.sequence', string='Secuencia de Recibos')
+    cuenta_analitica=fields.Many2many(comodel_name='account.analytic.account', string='Cuenta Analitica')
 
 class UserOptica(models.Model):
-    _inherit = 'res.users'    
+    _inherit = 'res.users'
     sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta')
     tarifas=fields.Many2many(comodel_name='product.pricelist', string='Tarifas permitidas')
 
@@ -127,4 +127,3 @@ class SaleOrderOptica(models.Model):
                                         , string='Tipo de Aro')
                                         
 
-    
