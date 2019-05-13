@@ -58,6 +58,7 @@ class FacturaSV(models.Model):
 		monto_letras=numero_a_letras(self.amount_total)	
     
 
+
 class SaleOrderOptica(models.Model):
     _inherit = 'sale.order')
     sucursal_id=fields.Many2one(comodel_name='stock.warehouse', string='Sucursal de venta',default=lambda self: self.env.user.sucursal_id.id)
