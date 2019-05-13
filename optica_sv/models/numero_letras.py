@@ -173,4 +173,4 @@ def leer_millones(numero):
 
 def leer_millardos(numero):
     millardo, millon = divmod(numero, 1000000)
-return '%s millones %s' % (leer_miles(millardo), leer_millones(millon))
+    return '%s millones %s' % (leer_miles(millardo), leer_millones(millon))
