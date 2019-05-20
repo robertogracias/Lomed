@@ -24,6 +24,7 @@ class UserOptica(models.Model):
 class FacturaSV(models.Model):
     _inherit = 'account.invoice'    
     sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta',default=lambda self: self.env.user.sucursal_id.id)
+    cuenta_analitica=fields.Many2many(comodel_name='account.analytic.account', string='Cuenta Analitica',default=lambda self: self.env.user.sucursal_id.cuenta_analitica.id)
     monto_letras=fields.Char('Monto en letras',compute='_fill_invoice',store=True)
     excento=fields.Float('excento',compute='_fill_invoice',store=True)
     gravado=fields.Float('gravado',compute='_fill_invoice',store=True)
@@ -42,6 +43,7 @@ class FacturaSV(models.Model):
         self.percibido=0
         self.iva=0
         for line in self.invoice_line_ids:
+			line.account_analytic_id=self.cuenta_analitica
             if line.invoice_line_tax_ids:
                 self.gravado=self.gravado+line.price_subtotal
             else:
