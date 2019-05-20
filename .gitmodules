@@ -2,3 +2,8 @@
 	path = robertogracias/otros
 	url = git@github.com:robertogracias/otros.git
 	branch = master
+
+[submodule "robertogracias/strategiksv"]
+	path = robertogracias/strategiksv
+	url = git@github.com:robertogracias/strategiksv.git
+	branch = 12
