@@ -20,6 +20,14 @@ class UserOptica(models.Model):
     _inherit = 'res.users'
     sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta')
     tarifas=fields.Many2many(comodel_name='product.pricelist', string='Tarifas permitidas')
+    
+    @api.model
+    def write(self, vals):
+        record = super(DataArr, self).write(vals)
+        usuario=self.env['res.users'].search([('id','=',self.id),('id','!=',res.id)],limit=1,order='id desc')
+        if (usuario.id==sefl.env.user.id):
+            self.env.context.update({'sucursal':self.env.user.sucursal_id.id})
+        return record
 
 class PaymentSV(models.Model):
     _inherit = 'account.payment'    
@@ -47,6 +55,7 @@ class FacturaSV(models.Model):
         self.retenido=0
         self.percibido=0
         self.iva=0
+        
         for line in self.invoice_line_ids:
             line.account_analytic_id=self.cuenta_analitica
             if line.invoice_line_tax_ids:
