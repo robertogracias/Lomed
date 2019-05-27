@@ -24,7 +24,7 @@ class UserOptica(models.Model):
     @api.model
     def write(self, vals):
         record = super(DataArr, self).write(vals)
-        usuario=self.env['res.users'].search([('id','=',self.id),('id','!=',res.id)],limit=1,order='id desc')
+        usuario=self.env['res.users'].search([('id','=',self.id)],limit=1)
         if (usuario.id==sefl.env.user.id):
             self.env.context.update({'sucursal':self.env.user.sucursal_id.id})
         return record
