@@ -48,7 +48,7 @@ class FacturaSV(models.Model):
         self.percibido=0
         self.iva=0
         for line in self.invoice_line_ids:
-			line.account_analytic_id=self.cuenta_analitica
+            line.account_analytic_id=self.cuenta_analitica
             if line.invoice_line_tax_ids:
                 self.gravado=self.gravado+line.price_subtotal
             else:
