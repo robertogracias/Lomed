@@ -21,13 +21,6 @@ class UserOptica(models.Model):
     sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta')
     tarifas=fields.Many2many(comodel_name='product.pricelist', string='Tarifas permitidas')
     
-    @api.model
-    def write(self, vals):
-        record = super(DataArr, self).write(vals)
-        usuario=self.env['res.users'].search([('id','=',self.id)],limit=1)
-        if (usuario.id==sefl.env.user.id):
-            #self.env.context.update({'sucursal':self.env.user.sucursal_id.id})
-        return record
 
 class PaymentSV(models.Model):
     _inherit = 'account.payment'    
