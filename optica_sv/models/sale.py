@@ -21,6 +21,11 @@ class UserOptica(models.Model):
     sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta')
     tarifas=fields.Many2many(comodel_name='product.pricelist', string='Tarifas permitidas')
 
+class PaymentSV(models.Model):
+    _inherit = 'account.payment'    
+    sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta',default=lambda self: self.env.user.sucursal_id.id)
+    cuenta_analitica=fields.Many2many(comodel_name='account.analytic.account', string='Cuenta Analitica',default=lambda self: self.env.user.sucursal_id.cuenta_analitica.id)   
+
 class FacturaSV(models.Model):
     _inherit = 'account.invoice'    
     sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta',default=lambda self: self.env.user.sucursal_id.id)
