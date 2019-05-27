@@ -26,7 +26,7 @@ class UserOptica(models.Model):
         record = super(DataArr, self).write(vals)
         usuario=self.env['res.users'].search([('id','=',self.id)],limit=1)
         if (usuario.id==sefl.env.user.id):
-            self.env.context.update({'sucursal':self.env.user.sucursal_id.id})
+            #self.env.context.update({'sucursal':self.env.user.sucursal_id.id})
         return record
 
 class PaymentSV(models.Model):
