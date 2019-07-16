@@ -7,7 +7,7 @@
        Localizacion de Opticas .""",
     "description": """
 	   Registra la orden de produccion para un laboratorio optico
-	
+
     """,
     "sequence": 1,
     "author": "Strategi-k",
@@ -16,6 +16,7 @@
     "depends": ['sale','stock','sale_stock'],
     "data": [
         'security/ir.model.access.csv'
+        ,'views/sale_order.xml'
     ],
     "installable": True,
     "application": True,

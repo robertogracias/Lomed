@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-
+optica_sv_cierre,optica_sv_cierre,model_optica_sv_cierre,base.group_user,1,1,1,1
+optica_sv_cierre_pago,optica_sv_cierre_pago,model_optica_sv_cierre_pago,base.group_user,1,1,1,1
