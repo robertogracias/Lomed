@@ -22,6 +22,7 @@ class UserOptica(models.Model):
     tarifas=fields.Many2many(comodel_name='product.pricelist', string='Tarifas permitidas')
 
 class FacturaSV(models.Model):
+    _inherit = 'account.invoice'
     sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta',default=lambda self: self.env.user.sucursal_id.id)
     monto_letras=fields.Char('Monto en letras',compute='_fill_invoice',store=True)
     excento=fields.Float('excento',compute='_fill_invoice',store=True)
@@ -30,7 +31,7 @@ class FacturaSV(models.Model):
     retenido=fields.Float('retenido',compute='_fill_invoice',store=True)
     percibido=fields.Float('percibido',compute='_fill_invoice',store=True)
     iva=fields.Float('iva',compute='_fill_invoice',store=True)
-    
+
     @api.one
     @api.depends('amount_total','invoice_line_ids')
     def _fill_invoice(self):
@@ -55,7 +56,6 @@ class FacturaSV(models.Model):
 
 class SaleOrderOptica(models.Model):
     _inherit = 'sale.order'
-    sucursal_id=fields.Many2one(comodel_name='stock.warehouse', string='Sucursal de venta',default=lambda self: self.env.user.sucursal_id.id)
     sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta',default=lambda self: self.env.user.sucursal_id.id)
     oi_esfera = fields.Float("OI. Esfera", required=True)
     oi_cilindro = fields.Float("OI. Cilindro", required=True)
@@ -67,7 +67,7 @@ class SaleOrderOptica(models.Model):
     oi_nasopupilar_cerca = fields.Float("OI. Distancia Nasopupilar Cerca", required=True)
     oi_nasopupilar_lejos = fields.Float("OI. Distancia Nasopupilar Lejos", required=True)
     oi_nasopupilar = fields.Float('OI. Distancia Nasopupilar Lejos',compute='_compute_nasopupilar', required=True)
-    
+
     od_esfera = fields.Float("OD. Esfera", required=True)
     od_cilindro = fields.Float("OD. Cilindro", required=True)
     od_eje = fields.Float("OD. Eje", required=True)
@@ -85,14 +85,14 @@ class SaleOrderOptica(models.Model):
     medida_b = fields.Float("B", required=True)
     medida_c = fields.Float("C", required=True)
     medida_d = fields.Float("D", required=True)
-    
-    
+
+
     @api.one
     @api.depends('oi_nasopupilar_cerca', 'oi_nasopupilar_cerca')
     def _compute_nasopupilar(self):
         self.oi_nasopupilar=self.oi_nasopupilar_cerca+self.oi_nasopupilar_lejos
         self.od_nasopupilar=self.od_nasopupilar_cerca+self.od_nasopupilar_lejos
-    
+
     antireflejo=fields.Boolean("Antireflejo", required=True)
     material=fields.Selection(selection=[('Policarbonato', 'Policarbonato'),('CR-39', 'CR-39'),('Vidrio', 'Vidrio'),('ThinLite', 'Thin&Lite'),('Otro', 'Otro')], string='Material')
     tipo_lente=fields.Selection(selection=[('Sencilla', 'Vision Sencilla'),('Multifocal', 'Multifocal'),('Bifocal', 'Bifocal')], string='Tipo de lente')
@@ -125,5 +125,3 @@ class SaleOrderOptica(models.Model):
                                         ,('Ranurado', 'Ranurado')
                                         ,('Al Aire', 'Al Aire')]
                                         , string='Tipo de Aro')
-                                        
-
