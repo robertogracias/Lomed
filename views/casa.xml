@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+ <!--form basico-->   
+<record model="ir.ui.view" id="optica_sv_casa_form">
+<field name="name">optica_sv_casa_form</field>
+<field name="model">optica_sv.casa</field>
+<field name="arch" type="xml">
+ <form string="Casa">
+ <sheet>
+ <group>
+ <field name="name" placeholder="Nombre"/>
+ <field name="code" placeholder="Codigo"/>
+ </group>
+ </sheet>
+ </form>
+ </field>
+ </record>
+
+  <!--view tree-->   
+<record model="ir.ui.view" id="optica_sv_casa_tree">
+<field name="name">optica_sv_casa_tree</field>
+<field name="model">optica_sv.casa</field>
+<field name="arch" type="xml">
+<tree>
+ <field name="name" placeholder="Nombre"/>
+ <field name="code" placeholder="Codigo"/>
+ </tree>
+ </field>
+ </record>
+
+<!--Menu-->
+
+<!--Action-->
+        <record model="ir.actions.act_window" id="casa_list_action">
+            <field name="name">Creacion de casa </field>
+            <field name="res_model">optica_sv.casa</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Crear Casa
+                </p>
+            </field>
+        </record>
+
+   <menuitem 
+   id="casa_menu" 
+   parent="menu_sub"
+   name="Casa"
+   action="casa_list_action"
+   sequence="2"
+   /> 
+ </data>
+</odoo>
