@@ -16,7 +16,15 @@
     "depends": ['sale','stock','sale_stock'],
     "data": [
         'security/ir.model.access.csv'
-        ,'views/sale_order.xml'
+        ,'views/sale_order.xml',
+        'views/marca.xml',
+        'views/casa.xml',
+        'views/color.xml',
+        'views/material.xml',
+        'views/medida.xml',
+        'views/product.xml',
+        'views/modelo.xml',
+        'views/tipo.xml'
     ],
     "installable": True,
     "application": True,

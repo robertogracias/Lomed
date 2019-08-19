@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+ <!--form basico-->   
+<record model="ir.ui.view" id="optica_sv_producto_form">
+<field name="name">optica_sv_producto_form</field>
+<field name="model">product.template</field>
+<field name="inherit_id" ref="product.product_template_form_view" />
+<field name="arch" type="xml">
+ <xpath expr="//group[@name='group_standard_price']" position="after">
+    <group string="Optica">
+        <field name="casa_id"/>   
+        <field name="color_id"/>   
+        <field name="marca_id"/>   
+        <field name="material_id"/>   
+        <field name="medida_id"/>   
+        <field name="modelo_id"/>   
+        <field name="tipo_id"/>   
+    </group>
+ </xpath>
+ </field>
+ </record>
+
+  <!--view tree-->   
+<record model="ir.ui.view" id="optica_sv_producto_tree">
+<field name="name">optica_sv_producto_tree</field>
+<field name="model">product.template</field>
+<field name="inherit_id" ref="product.product_template_tree_view" />
+<field name="arch" type="xml">
+<xpath expr="//field[@name='categ_id']" position="after">
+<field name="casa_id"/>   
+<field name="modelo_id"/>   
+</xpath>
+ </field>
+ </record>
+
+
+ </data>
+</odoo>
