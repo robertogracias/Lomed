@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+optica_sv_marca,optica_sv_marca,model_optica_sv_marca,base.group_user,1,1,1,1
+optica_sv_casa,optica_sv_casa,model_optica_sv_casa,base.group_user,1,1,1,1
+optica_sv_color,optica_sv_color,model_optica_sv_color,base.group_user,1,1,1,1
+optica_sv_material,optica_sv_material,model_optica_sv_material,base.group_user,1,1,1,1
+optica_sv_medida,optica_sv_medida,model_optica_sv_medida,base.group_user,1,1,1,1
+optica_sv_modelo,optica_sv_modelo,model_optica_sv_modelo,base.group_user,1,1,1,1
+optica_sv_producto,optica_sv_producto,model_optica_sv_producto,base.group_user,1,1,1,1
+optica_sv_tipo,optica_sv_tipo,model_optica_sv_tipo,base.group_user,1,1,1,1
