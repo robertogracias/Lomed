@@ -146,7 +146,18 @@ class cierrepago(models.Model):
     cierre_id=fields.Many2one(comodel_name='optica_sv.cierre', string='Cierre')
     journal_id=fields.Many2one(comodel_name='account.journal', string='Metodo de pago')
     monto=fields.Float("Monto")
-
+    
+    
+class cierretrasnferencia(models.Model):
+    _name = 'optica_sv.cierre_transferencia'
+    _description = 'Transferencia pendientes al cierre'
+    name=fields.Char("Transferencia")
+    cierre_id=fields.Many2one(comodel_name='optica_sv.cierre', string='Cierre')
+    move_id=fields.Many2one(comodel_name='stock.move', string='Transferencia')
+    location_dest_id=fields.Many2one(comodel_name='stock.location',related='move_id.location_dest_id', string='Destino')
+    partner_id=fields.Many2one(comodel_name='res.partner',related='move_id.partner_id', string='Cliente')
+    origin=fields.Char(related='move_id.origin', string='Doc. Origen')
+    product_qty=fields.Float(related='move_id.product_qty', string='Cantidad')
 
 class cierresv(models.Model):
     _name = 'optica_sv.cierre'
@@ -166,6 +177,7 @@ class cierresv(models.Model):
     total_venta=fields.Float("Total de Ordenes")
     total_facturado=fields.Float("Total de Facturado")
     total_pagado=fields.Float("Total de Pagos")
+    transferencia_ids=fields.One2many('optica_sv.cierre_transferencia','cierre_id','movimeintos')
     #Marcando como cerrado el dia
     def cerrar(self):
         for record in self:
@@ -223,6 +235,9 @@ class cierresv(models.Model):
                     pago.write({'cierre_id':record.id})
                     total_pagado=total_pagado+pago.amount
             diarios=self.env['account.journal'].search([('id','>',0)])
+            transferencias=self.env['stock.move'].search(['&',('location_id','=',record.sucursal_id.id),('state','not in',('draft','cancel','done'))])
+            for transferencia in transferencias:
+                self.env['optica_sv.cierre_transferencia'].create({'name':transferencia.name,'cierre_id':record.id,'move_id':transferencia.id})
             for diario in diarios:
                 total_diario=0.0
                 pagos2=self.env['account.payment'].search(['&',('cierre_id','=',record.id),('journal_id','=',diario.id)])
