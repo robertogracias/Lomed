@@ -235,7 +235,7 @@ class cierresv(models.Model):
                     pago.write({'cierre_id':record.id})
                     total_pagado=total_pagado+pago.amount
             diarios=self.env['account.journal'].search([('id','>',0)])
-            transferencias=self.env['stock.move'].search(['&',('location_id','=',record.sucursal_id.id),('state','not in',('draft','cancel','done'))])
+            transferencias=self.env['stock.move'].search(['&','&',('location_id','=',record.sucursal_id.id),('date','>=','2020-01-01'),('state','not in',('draft','cancel','done'))])
             for transferencia in transferencias:
                 self.env['optica_sv.cierre_transferencia'].create({'name':transferencia.name,'cierre_id':record.id,'move_id':transferencia.id})
             for diario in diarios:
