@@ -13,4 +13,6 @@ class productotemplate(models.Model):
     modelo_id=fields.Many2one(comodel_name='optica_sv.modelo', string='Modelo')
     tipo_id=fields.Many2one(comodel_name='optica_sv.tipo', string='Tipo')
     
-   
+class productocategory(models.Model):
+    _inherit='product.category'
+    excluir_cierre=fields.Boolean("Excluir del cierre")

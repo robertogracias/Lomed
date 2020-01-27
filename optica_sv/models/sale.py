@@ -237,7 +237,12 @@ class cierresv(models.Model):
             diarios=self.env['account.journal'].search([('id','>',0)])
             transferencias=self.env['stock.move'].search(['&','&',('location_id','=',record.sucursal_id.id),('date','>=','2020-01-01'),('state','not in',('draft','cancel','done'))])
             for transferencia in transferencias:
-                self.env['optica_sv.cierre_transferencia'].create({'name':transferencia.name,'cierre_id':record.id,'move_id':transferencia.id})
+                x=0
+                for ml in transferencia.move_line_ids:
+                    if not ml.product_id.product_tmpl_id.categ_id.excluir_cierre:
+                        x=1
+                if x==1:
+                    self.env['optica_sv.cierre_transferencia'].create({'name':transferencia.name,'cierre_id':record.id,'move_id':transferencia.id})
             for diario in diarios:
                 total_diario=0.0
                 pagos2=self.env['account.payment'].search(['&',('cierre_id','=',record.id),('journal_id','=',diario.id)])
