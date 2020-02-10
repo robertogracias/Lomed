@@ -24,7 +24,8 @@
         'views/medida.xml',
         'views/product.xml',
         'views/modelo.xml',
-        'views/tipo.xml'
+        'views/tipo.xml',
+        'views/anticipo.xml'
     ],
     "installable": True,
     "application": True,

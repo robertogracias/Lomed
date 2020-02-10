@@ -8,6 +8,7 @@ from datetime import date
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import float_is_zero, float_compare, DEFAULT_SERVER_DATETIME_FORMAT
 from odoo import SUPERUSER_ID
+import json
 
 
 class Sucursal(models.Model):
@@ -28,7 +29,8 @@ class PaymentSV(models.Model):
     sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta',default=lambda self: self.env.user.sucursal_id.id)
     cuenta_analitica=fields.Many2many(comodel_name='account.analytic.account', string='Cuenta Analitica',default=lambda self: self.env.user.sucursal_id.cuenta_analitica.id)
     cierre_id=fields.Many2one(comodel_name='optica_sv.cierre', string='Cierre')
-
+    anticipo_id=fields.Many2one(comodel_name='optica_sv.anticipo', string='Anticipo')
+    
 class FacturaSV(models.Model):
     _inherit = 'account.invoice'
     sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta',default=lambda self: self.env.user.sucursal_id.id)
@@ -98,7 +100,29 @@ class SaleOrderOptica(models.Model):
     medida_b = fields.Float("B", required=False)
     medida_c = fields.Float("C", required=False)
     medida_d = fields.Float("D", required=False)
+    anticipo_ids=fields.One2many('optica_sv.anticipo','order_id','anticipos')
 
+    @api.multi
+    def anticipar(self):
+        self.ensure_one()
+        compose_form = self.env.ref('optica_sv.optica_sv_anticipo', False)
+        ctx = dict(
+            default_order_id=self.id,
+            default_type='Traslado'
+        )
+        return {
+            'name': 'Anticipo',
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'optica_sv.anticipo',
+            'views': [(compose_form.id, 'form')],
+            'target': 'new',
+            'view_id': 'compose_form.id',
+            'flags': {'action_buttons': True},
+            'context': ctx
+        }
+    
 
     @api.one
     @api.depends('oi_nasopupilar_cerca', 'oi_nasopupilar_cerca')
@@ -178,6 +202,8 @@ class cierresv(models.Model):
     total_facturado=fields.Float("Total de Facturado")
     total_pagado=fields.Float("Total de Pagos")
     transferencia_ids=fields.One2many('optica_sv.cierre_transferencia','cierre_id','movimeintos')
+    anticipo_ids=fields.One2many('optica_sv.anticipo','cierre_id','anticipos')
+
     #Marcando como cerrado el dia
     def cerrar(self):
         for record in self:
@@ -193,6 +219,9 @@ class cierresv(models.Model):
                 factura.write({'cierre_id':False})
             pagos=self.env['account.payment'].search([('cierre_id','=',record.id)])
             for pago in pagos:
+                pago.write({'cierre_id':False})
+            anticipos=self.env['optica_sv.anticipo'].search([('cierre_id','=',record.id)])
+            for pago in anticipos:
                 pago.write({'cierre_id':False})
             cierres=self.env['optica_sv.cierre_pago'].search([('cierre_id','=',record.id)])
             for cierre in cierres:
@@ -229,7 +258,12 @@ class cierresv(models.Model):
                 if not factura.cierre_id:
                     factura.write({'cierre_id':record.id})
                     total_facturado=total_facturado+factura.amount_total
-            pagos=self.env['account.payment'].search(['&',('sucursal_id','=',record.sucursal_id.id),('payment_date','>=',hoy_1),('payment_date','<=',hoy_2)])
+            anticipos=self.env['optica_sv.anticipo'].search(['&',('sucursal_id','=',record.sucursal_id.id),('fecha','>=',hoy_1),('fecha','<=',hoy_2)])
+            for pago in anticipos:
+                if not pago.cierre_id:
+                    pago.write({'cierre_id':record.id})
+                    total_pagado=total_pagado+pago.amount
+            pagos=self.env['account.payment'].search(['&',('sucursal_id','=',record.sucursal_id.id),('payment_date','>=',hoy_1),('payment_date','<=',hoy_2),('anticipo_id','=',False)])
             for pago in pagos:
                 if not pago.cierre_id:
                     pago.write({'cierre_id':record.id})
@@ -245,10 +279,155 @@ class cierresv(models.Model):
                     self.env['optica_sv.cierre_transferencia'].create({'name':transferencia.name,'cierre_id':record.id,'move_id':transferencia.id})
             for diario in diarios:
                 total_diario=0.0
-                pagos2=self.env['account.payment'].search(['&',('cierre_id','=',record.id),('journal_id','=',diario.id)])
+                pagos2=self.env['account.payment'].search(['&',('cierre_id','=',record.id),('journal_id','=',diario.id),('anticipo_id','=',False)])
                 for pago2 in pagos2:
+                    total_diario=total_diario+pago2.amount
+                anticipos2=self.env['optica_sv.anticipo'].search(['&',('cierre_id','=',record.id),('journal_id','=',diario.id)])
+                for pago2 in anticipos2:
                     total_diario=total_diario+pago2.amount
                 if total_diario>0:
                     self.env['optica_sv.cierre_pago'].create({'name':diario.name,'cierre_id':record.id,'journal_id':diario.id,'monto':total_diario})
             #raise ValidationError("hay ordenes: %s" %total_venta)
             record.write({'total_venta':total_venta,'total_facturado':total_facturado,'total_pagado':total_pagado})
+
+class company(models.Model):
+    _inherit='res.company'
+    anticipo_account_id=fields.Many2one(comodel_name='account.account', string='Cuenta de anticipos')
+
+class anticipo(models.Model):
+    _name = 'optica_sv.anticipo'
+    _description = 'Anticipo a factura'
+    name=fields.Char('Referencia')
+    journal_id=fields.Many2one(comodel_name='account.journal', string='Metodo de pago')
+    invoice_id=fields.Many2one(comodel_name='account.invoice', string='Factura')
+    order_id=fields.Many2one(comodel_name='sale.order', string='Orden de venta')
+    cierre_id=fields.Many2one(comodel_name='optica_sv.cierre', string='Cierre')
+    monto=fields.Float("Monto")
+    fecha=fields.Date("Fecha")
+    comentario=fields.Text("Comentario")
+    sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta',default=lambda self: self.env.user.sucursal_id.id)
+    state=fields.Selection(selection=[('Borrador', 'Borrador')
+                                        ,('Recibido', 'Recibido')
+                                        ,('Aplicado', 'Aplicado')
+                                        ,('Anulado', 'Anulado')]
+                                        , string='Estado',default='Borrador')
+    move_recibido_id=fields.Many2one(comodel_name='account.move', string='Movimiento de recibido')
+    move_aplicacion_id=fields.Many2one(comodel_name='account.move', string='Movimiento de aplicacion')
+    
+    def recibir(self):
+        for r in self:
+            dic={}
+            lines=[]
+            cargo={}
+            abono={}
+            
+            dic['journal_id']=r.journal_id.id
+            dic['fecha']=datetime.strftime(datetime.now(), '%Y-%m-%d')
+            dic['sv_concepto']='Anticipo'+r.comentario
+            cargo['name']='Anticipo:'
+            abono['name']='Anticipo'
+            cargo['credit']=0
+            cargo['debit']=r.monto
+            abono['credit']=r.monto
+            abono['debit']=0
+            if r.invoice_id:
+                dic['partner_id']=r.invoice_id.partner_id.id
+                cargo['partner_id']=r.invoice_id.partner_id.id
+                cargo['account_id']=r.journal_id.default_credit_account_id.id
+                abono['partner_id']=r.invoice_id.partner_id.id
+                abono['account_id']=r.invoice_id.company_id.anticipo_account_id.id
+            else:
+                if r.order_id:
+                    dic['partner_id']=r.order_id.partner_id.id
+                    cargo['partner_id']=r.order_id.partner_id.id
+                    cargo['account_id']=r.journal_id.default_credit_account_id.id
+                    abono['partner_id']=r.order_id.partner_id.id
+                    abono['account_id']=r.order_id.company_id.anticipo_account_id.id
+            abono1=(0,0,abono)
+            cargo1=(0,0,cargo)
+            lines.append(cargo1)
+            lines.append(abono1)
+            dic['line_ids']=lines
+            #raise ValidationError('Diccionario '+json.dumps(dic))
+            move=self.env['account.move'].create(dic)
+            r.move_recibido_id=move.id
+            r.state='Recibido'
+    
+    def aplicar(self):
+        for r in self:
+            dic={}
+            lines=[]
+            cargo={}
+            abono={}
+            dic['journal_id']=r.journal_id.id
+            dic['fecha']=datetime.strftime(datetime.now(), '%Y-%m-%d')
+            dic['sv_concepto']='Anticipo'+r.comentario
+            cargo['name']='Anticipo:'
+            abono['name']='Anticipo'
+            cargo['credit']=0
+            cargo['debit']=r.monto
+            abono['credit']=r.monto
+            abono['debit']=0
+            if r.invoice_id:
+                dic['partner_id']=r.invoice_id.partner_id.id
+                cargo['partner_id']=r.invoice_id.partner_id.id
+                cargo['account_id']=r.invoice_id.company_id.anticipo_account_id.id
+                abono['partner_id']=r.invoice_id.partner_id.id
+                abono['account_id']=r.invoice_id.account_id.id
+            else:
+                if r.order_id:
+                    dic['partner_id']=r.order_id.partner_id.id
+                    cargo['partner_id']=r.order_id.partner_id.id
+                    cargo['account_id']=r.order_id.company_id.anticipo_account_id.id
+                    abono['partner_id']=r.order_id.partner_id.id
+                    abono['account_id']=r.order_id.partner_id.property_account_receivable_id.id
+            abono1=(0,0,abono)
+            cargo1=(0,0,cargo)
+            lines.append(cargo1)
+            lines.append(abono1)
+            dic['line_ids']=lines
+            #raise ValidationError('Diccionario '+json.dumps(dic))
+            move=self.env['account.move'].create(dic)
+            r.move_aplicacion_id=move.id
+            r.state='Aplicado'
+            
+    def anular(self):
+        for r in self:
+            r.state='Anulado'
+            if r.move_aplicacion_id:
+                r.move_aplicacion_id.unlink()
+            if r.move_recibido_id:
+                r.move_recibido_id.unlink()
+
+class sv_account_invoice(models.Model):
+    _inherit='account.invoice'
+    anticipo_ids=fields.One2many('optica_sv.anticipo','invoice_id','anticipos')
+    total_con_anticipos=fields.Float("Total ya con antipos",compute='calcular')
+    
+    @api.multi
+    def anticipar(self):
+        self.ensure_one()
+        compose_form = self.env.ref('optica_sv.optica_sv_anticipo', False)
+        ctx = dict(
+            default_invoice_id=self.id,
+            default_type='Traslado'
+        )
+        return {
+            'name': 'Anticipo',
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'optica_sv.anticipo',
+            'views': [(compose_form.id, 'form')],
+            'target': 'new',
+            'view_id': 'compose_form.id',
+            'flags': {'action_buttons': True},
+            'context': ctx
+        }
+    
+    def calcular(self):
+        for r in self:
+            x=0.0
+            for a in r.anticipo_ids:
+                x+=a.monto
+            r.total_con_anticipos=r.amount_total-x;

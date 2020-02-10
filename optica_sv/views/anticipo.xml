@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+  <data>
+
+
+    <record model="ir.ui.view" id="anticipo_company_form">
+      <field name="name">anticipo_company_form</field>
+      <field name="model">res.company</field>
+      <field name="inherit_id" ref="base.view_company_form" />
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='currency_id']" position="after">
+          <field name="anticipo_account_id" />
+        </xpath>
+      </field>
+    </record>
+
+
+    <!-- pantalla de cierres  -->
+    <record model="ir.ui.view" id="optica_sv_anticipo">
+      <field name="name">optica_sv_anticipo</field>
+      <field name="model">optica_sv.anticipo</field>
+      <field name="arch" type="xml">
+        <form>
+          <header>
+            <button name="recibir" string="Recibir" type="object" class="oe_highlight" states="Borrador" />
+            <button name="aplicar" string="Aplicar" type="object" class="oe_highlight" states="Recibido" />
+            <button name="anular" string="Anular" type="object" class="oe_highlight" states="Recibido.Aplicado" />
+            <field name="state" widget="statusbar" />
+          </header>
+          <sheet>
+            <div class="oe_title oe_inline">
+              <label for="name" class="oe_edit_only" />
+              <h1>
+                <field name="name" />
+              </h1>
+            </div>
+            <group>
+              <field name="fecha" />
+              <field name="journal_id" />
+              <field name="monto" />
+              <field name="comentario" />
+              <field name="move_recibido_id" readonly="1" />
+              <field name="move_aplicacion_id" readonly="1" />
+            </group>
+
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="anticipo_invoice_anticipo_form">
+      <field name="name">anticipo_invoice_anticipo_form</field>
+      <field name="model">account.invoice</field>
+      <field name="inherit_id" ref="account.invoice_form" />
+      <field name="arch" type="xml">
+        <xpath expr="//page[@name='other_info']" position="after">
+          <page string="Anticipos">
+            <field name="anticipo_ids">
+              <tree>
+                <field name="fecha" />
+                <field name="journal_id" />
+                <field name="monto" sum="total" />
+                <field name="comentario" />
+                <field name="state" />
+              </tree>
+            </field>
+          </page>
+        </xpath>
+        <xpath expr="//field[@name='state']" position="before">
+          <button name="anticipar" string="Crear Anticipo" attrs="{'invisible':[('state', 'in', ('draft','canceled') )]}" type="object" class="oe_highlight" />
+        </xpath>
+      </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="anticipo_sale_anticipo_form">
+      <field name="name">anticipo_sale_anticipo_form</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form" />
+      <field name="arch" type="xml">
+        <xpath expr="//page[@name='other_information']" position="after">
+          <page string="Anticipos">
+            <field name="anticipo_ids">
+              <tree>
+                <field name="fecha" />
+                <field name="journal_id" />
+                <field name="monto" sum="total" />
+                <field name="comentario" />
+                <field name="state" />
+              </tree>
+            </field>
+          </page>
+        </xpath>
+        <xpath expr="//field[@name='state']" position="before">
+          <button name="anticipar" string="Crear Anticipo" attrs="{'invisible':[('state', 'in', ('draft','cancel') )]}" type="object" class="oe_highlight" />
+        </xpath>
+      </field>
+    </record>
+
+
+  </data>
+</odoo>
