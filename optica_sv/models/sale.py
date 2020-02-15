@@ -305,6 +305,7 @@ class anticipo(models.Model):
     monto=fields.Float("Monto")
     fecha=fields.Date("Fecha")
     comentario=fields.Text("Comentario")
+    partner_id=fields.Many2one(comodel_name='res.partner', string='Cliente',related='move_recibido_id.partner_id')
     sucursal_id=fields.Many2one(comodel_name='stock.location', string='Sucursal de venta',default=lambda self: self.env.user.sucursal_id.id)
     state=fields.Selection(selection=[('Borrador', 'Borrador')
                                         ,('Recibido', 'Recibido')
