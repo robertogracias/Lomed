@@ -258,11 +258,11 @@ class cierresv(models.Model):
                 if not factura.cierre_id:
                     factura.write({'cierre_id':record.id})
                     total_facturado=total_facturado+factura.amount_total
-            anticipos=self.env['optica_sv.anticipo'].search(['&',('sucursal_id','=',record.sucursal_id.id),('fecha','>=',hoy_1),('fecha','<=',hoy_2)])
+            anticipos=self.env['optica_sv.anticipo'].search(['&',('sucursal_id','=',record.sucursal_id.id),('state','in',('Recibido','Aplicado')),('fecha','>=',hoy_1),('fecha','<=',hoy_2)])
             for pago in anticipos:
                 if not pago.cierre_id:
                     pago.write({'cierre_id':record.id})
-                    total_pagado=total_pagado+pago.amount
+                    total_pagado=total_pagado+pago.monto
             pagos=self.env['account.payment'].search(['&',('sucursal_id','=',record.sucursal_id.id),('payment_date','>=',hoy_1),('payment_date','<=',hoy_2),('anticipo_id','=',False)])
             for pago in pagos:
                 if not pago.cierre_id:
@@ -284,7 +284,7 @@ class cierresv(models.Model):
                     total_diario=total_diario+pago2.amount
                 anticipos2=self.env['optica_sv.anticipo'].search(['&',('cierre_id','=',record.id),('journal_id','=',diario.id)])
                 for pago2 in anticipos2:
-                    total_diario=total_diario+pago2.amount
+                    total_diario=total_diario+pago2.monto
                 if total_diario>0:
                     self.env['optica_sv.cierre_pago'].create({'name':diario.name,'cierre_id':record.id,'journal_id':diario.id,'monto':total_diario})
             #raise ValidationError("hay ordenes: %s" %total_venta)
