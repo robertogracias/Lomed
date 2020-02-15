@@ -31,14 +31,14 @@
             <div class="oe_title oe_inline">
               <label for="name" class="oe_edit_only" />
               <h1>
-                <field name="name" />
+                <field name="name" required="1"/>
               </h1>
             </div>
             <group>
-              <field name="fecha" />
-              <field name="journal_id" />
-              <field name="monto" />
-              <field name="comentario" />
+              <field name="fecha"  required="1"/>
+              <field name="journal_id"  required="1"/>
+              <field name="monto"  required="1"/>
+              <field name="comentario"  required="1"/>
               <field name="move_recibido_id" readonly="1" />
               <field name="move_aplicacion_id" readonly="1" />
             </group>

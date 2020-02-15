@@ -350,6 +350,7 @@ class anticipo(models.Model):
             dic['line_ids']=lines
             #raise ValidationError('Diccionario '+json.dumps(dic))
             move=self.env['account.move'].create(dic)
+            move.action_post()
             r.move_recibido_id=move.id
             r.state='Recibido'
     
@@ -388,6 +389,7 @@ class anticipo(models.Model):
             dic['line_ids']=lines
             #raise ValidationError('Diccionario '+json.dumps(dic))
             move=self.env['account.move'].create(dic)
+            move.action_post()
             r.move_aplicacion_id=move.id
             r.state='Aplicado'
             
