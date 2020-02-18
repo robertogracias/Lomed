@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="sale_order_form">
+            <field name="name">sale_order_form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+            <xpath expr="//page[@name='order_lines']" position="after">	
+                <group string="Orden de trabajo">
+                   
+                    <group name="odid">        
+                        <group name="right" string="Ojo Derecho">
+                        <field name="od_esfera"/>
+                        <field name="od_cilindro"/>
+                        <field name="od_eje"/>
+                        <field name="od_adicion"/>
+                        <field name="od_prisma"/>
+                         </group>  
+                    <group name="left" string="Ojo Izquierdo">
+                        <field name="oi_esfera"/>
+                        <field name="oi_cilindro"/>
+                        <field name="oi_eje"/>
+                        <field name="oi_adicion"/>
+                        <field name="oi_prisma"/>
+                    </group>
+                      
+                        </group>   
+
+
+                        <group>
+                        <field name="policar"/>
+                        <field name="cr_49"/>
+                        <field name="anti"/>
+                        <field name="clase"/>
+                        <field name="color"/>
+                        <field name="base"/>
+                        </group>
+                
+                        <group name="odoi">    
+                        <group name="right1" string="Ojo Derecho">   
+                        <field name="od_alt_oblea"/>
+                        <field name="od_alt_pupilar"/>
+                        <field name="od_alt_lejos"/>
+                        <field name="od_alt_cerca"/>
+                        </group> 
+                
+                        <group name="left1" string="Ojo Izquierda">  
+                        <field name="oi_alt_oblea"/>
+                        <field name="oi_alt_pupilar"/>
+                        <field name="oi_alt_lejos"/>
+                        <field name="oi_alt_cerca"/>
+                        </group>
+                    </group> 
+                    <group>  
+                        <field name="aro"/>
+                        <field name="medida"/>
+                        <field name="examino"/>
+                        <field name="asesor"/>
+                        <field name="fecha_entrega"/>
+                        <field name="color2"/>
+                        <field name="a"/>
+                        <field name="b"/>
+                        <field name="c"/>
+                        <field name="d"/>
+                        <field name="observaciones"/>    
+                        </group>
+                </group>
+            </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+       

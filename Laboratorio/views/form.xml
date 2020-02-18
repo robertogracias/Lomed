@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+      
+
+
+ <!--form basico para prueba-->   
+ <record model="ir.ui.view" id="lomed_form_1">
+        <field name="name">lomed_form_1</field>
+        <field name="model">lomed.formoptica</field>
+        <field name="arch" type="xml">
+         <form string="LOMED laboratorio optico">   
+
+            <div id="prueba">
+                <script language="Javascript">
+
+                    var clientes;
+                    var referencia={};
+                    var nombres={};
+                    $(".o_input").on("keypress", function(e) {
+                        /* ENTER PRESSED*/
+                        if (e.keyCode == 13) {
+                            /* FOCUS ELEMENT */
+                            var inputs = $(".o_form_sheet").find(".o_input");
+                            var idx = inputs.index(this);
+    
+                            if (idx == inputs.length - 1) {
+                                inputs[0].select()
+                            } else {
+                                inputs[idx + 1].focus(); //  handles submit buttons
+                               
+                            }
+                            return false;
+                        }
+                    });
+    
+
+                    $( document ).ready(function() {
+                        $.ajax({url: "/select/clientes", success: function(result){
+                           //alert(result)
+                            clientes=JSON.parse(result)
+                           $.each(clientes.collection, function(i, item) {
+                            referencia[item.code]= item.nombre
+                            nombres[item.code]= item.id
+                        
+                        });
+                            }
+                        });
+
+                        $("input[name='ref']").keyup(function(event) { 
+                            if (event.keyCode == 13) {
+                                /* FOCUS ELEMENT */
+                                var inputs = $(".o_form_sheet").find(".o_input");
+                                var idx = inputs.index(this);
+        
+                                if (idx == inputs.length - 1) {
+                                    inputs[0].select()
+                                } else {
+                                    inputs[idx + 1].focus(); //  handles submit buttons
+                                   
+                                }
+                                return false;
+                            }
+                            x= $("input[name='ref']").val();
+                            y = referencia[x];
+                            z= nombres[x]
+                            try  
+                            {
+                                //alert(x);
+                           
+                            $("input[name='optica']").val(y); 
+                            $("input[name='optica_id']").val(z);   
+                            }
+                            catch(error)
+                            {
+                            }
+                        });
+                            
+                    });
+
+             
+
+                    function imprSelec(prueba) {
+                      var ficha = document.getElementById(prueba);
+                      var ventimp = window.open(' ', 'popimpr');
+                      ventimp.document.write( ficha.innerHTML );
+                      ventimp.document.close();
+                      ventimp.print( );
+                      ventimp.close();
+                    }
+                </script>
+                <field name="image" widget="html" readonly="1" invisible="1"/>
+                
+
+            </div>
+
+            
+
+        <header>
+        <button name="aprobado" states="Borrador" string="Procesar" type="object" class="oe_highlight" onclick="javascript:imprSelec('prueba')"/>
+        </header> 
+        <sheet>      
+
+            <div class="oe_button_box" name="button_box">
+                <button name="historial" type="object" string="Historial" class="oe_stat_button" icon="fa-file-text-o"/>
+                <button name="bitacora" type="object" string="Bitacora" class="oe_stat_button" icon="fa-th-large"/>
+                <button name="vineta" type="action" string="Viñeta" class="oe_stat_button" icon="fa-barcode" onclick="javascript:imprSelec('prueba')"/>
+                <button name="historial1" type="object" string="Historial" class="oe_stat_button" icon="fa-file-text-o"/>
+                <button class="oe_stat_button" type="action" name="304" icon="fa-usd"/>
+              </div> 
+            <h2 style="background-color: #8cb1c2"><b> Optica </b></h2>
+            <group name="form" >    
+          
+                <group >
+                    <field name="ref"/>
+                    <field name="optica"/>
+                   
+                    <field name="name"  />  
+                    <field name="date1"/> 
+                    <field name="tipo_trabaajo"/>
+                </group>       
+
+                 <group>  
+                    
+                    <field name="ordenes"/>
+
+                </group>  
+                </group>    
+               
+                <h2 style="background-color: #8cb1c2"><b>  Parametros de lente </b></h2>
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Esfera</th>
+                        <th scope="col">Cilindro</th>
+                        <th scope="col">Eje</th>
+                        <th scope="col">Prisma</th>
+                        <th scope="col">adicion</th>
+                        <th scope="col">A.Oblea</th>
+                        <th scope="col">A.Pupilar</th>
+                        <th scope="col">A.lejos</th>
+                        <th scope="col">A.cerca</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">O.D</th>
+                        <td> <field name="od_esfera"/></td>
+                        <td>  <field name="od_cilindro"/></td>
+                        <td> <field name="od_eje"/></td>
+                        <td><field name="od_prisma"/></td>
+                        <td> <field name="od_adicion"/></td>
+                        <td> <field name="od_alt_oblea"/></td>
+                        <td> <field name="od_alt_pupilar"/></td>
+                        <td>  <field name="od_alt_lejos"/></td>
+                        <td>  <field name="od_alt_cerca"/></td>
+                      </tr>
+
+                      <tr>
+                        <th scope="row">O.I</th>
+                        <td><field name="oi_esfera"/></td>
+                        <td>  <field name="oi_cilindro"/></td>
+                        <td> <field name="oi_eje"/></td>
+                        <td><field name="oi_prisma"/></td>
+                        <td> <field name="oi_adicion"/></td>
+                        <td> <field name="oi_alt_oblea"/></td>
+                        <td> <field name="oi_alt_pupilar"/></td>
+                        <td>  <field name="oi_alt_lejos"/></td>
+                        <td>  <field name="oi_alt_cerca"/></td>
+                      </tr>
+                      
+                    </tbody>
+                  </table>
+
+                <h2 style="background-color: #8cb1c2"><b>  Aro </b></h2>
+                    <group>  
+                    <field name="aro"/>
+                    <field name="anti"/>
+                    <field name="medida"/>
+                </group>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Material</th>
+                            <th scope="col">Color</th>
+                            <th scope="col">Lente</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">*</th>
+                            <td> <field name="tipo_id"/></td>
+                            <td>   <field name="material_id"  domain="[['tipo_id','=', tipo_id]]"/></td>
+                            <td><field name="color_id"  domain="[['material_id','=', material_id]]" /></td>
+                            <td><field name="lente_id"  domain="[['color_id','=', color_id]]"/></td>
+                         
+                          </tr>
+                          
+                       
+                        </tbody>
+                      </table>
+                     
+                    <field name="optica_id" invisible="1"/>
+                    <field name="state" invisible="1" />
+             
+                    <h2 style="background-color: #8cb1c2"><b> Referencia</b></h2>
+                    <group>
+                    <field name="examino"/>
+                    <field name="asesor"/>
+                    <field name="fecha_entrega"/>
+                     <field name="observaciones"/>    
+
+                </group>
+
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">A</th>
+                        <th scope="col">B</th>
+                        <th scope="col">C</th>
+                        <th scope="col">D</th>
+                       
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">*</th>
+                        <td> <field name="a"/></td>
+                        <td>  <field name="b"/></td>
+                        <td> <field name="c"/></td>
+                        <td><field name="d"/></td>
+                       
+                      </tr>
+
+                   
+                      
+                    </tbody>
+                  </table>
+        </sheet>
+        </form>
+        </field>
+        </record>
+
+
+
+        <record model="ir.ui.view" id="lomed_formoptica_tree">
+            <field name="name">lomed_formoptica_tree</field>
+            <field name="model">lomed.formoptica</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="ref"/>
+                    <field name="optica"/>
+                    <field name="optica_id"/>
+                    <field name="name"  />
+               
+                </tree>
+            </field>
+         </record>
+
+
+         <record model="ir.ui.view" id="lomed_form_tree">
+            <field name="name">sale_order_tree_lomed</field>
+            <field name="model">sale.order</field>
+            <field name="arch" type="xml">
+        
+                <tree string="Sales Orders" decoration-muted="state=='cancel'">
+                    <field name="name" string="Order Number"/>
+                    <field name="confirmation_date" string="Confirmation Date"/>
+                    <field name="commitment_date" groups="sale.group_sale_order_dates"/>
+                    <field name="expected_date" groups="sale.group_sale_order_dates"/>
+                    <field name="partner_id"/>
+                    <field name="user_id"/>
+                    <field name="amount_total" sum="Total Tax Included" widget="monetary"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="invoice_status" invisible="1"/>
+                    <field name="state" invisible="1"/>
+                </tree>
+            
+        </field>
+        </record>
+
+<!--Action para prueba-->
+<record model="ir.actions.act_window" id="form_lomed_action">
+        <field name="name">LOMED laboratorio optico </field>
+        <field name="res_model">lomed.formoptica</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form,tree</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">LOMED laboratorio optico
+            </p>
+        </field>
+    </record>
+
+<menuitem 
+id="prueba_menu" 
+name="LOMED laboratorio optico"
+action="form_lomed_action"
+sequence="1"
+/> 
+
+
+    </data>
+</odoo>
+        

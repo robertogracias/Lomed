@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+lomed_formoptica,lomed_formoptica,model_lomed_formoptica,base.group_user,1,1,1,1
+lomed_opticatipo,lomed_opticatipo,model_lomed_opticatipo,base.group_user,1,1,1,1
+lomed_opticamaterial,lomed_opticamaterial,model_lomed_opticamaterial,base.group_user,1,1,1,1
+lomed_opticacolor,lomed_opticacolor,model_lomed_opticacolor,base.group_user,1,1,1,1
+lomed_opticalentes,lomed_opticalentes,model_lomed_opticalentes,base.group_user,1,1,1,1
+lomed_opticalentenom,lomed_opticalentenom,model_lomed_opticalentenom,base.group_user,1,1,1,1
